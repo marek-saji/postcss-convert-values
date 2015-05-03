@@ -4,7 +4,8 @@
   "description": "Convert values with PostCSS (e.g. ms -> s)",
   "main": "index.js",
   "scripts": {
-    "test": "tape test.js | tap-spec"
+    "test": "tape test.js | tap-spec",
+    "jscs": "jscs index.js test.js lib/*.js"
   },
   "keywords": [
     "css",
@@ -25,7 +26,8 @@
   },
   "repository": "ben-eb/postcss-convert-values",
   "dependencies": {
-    "postcss": "^4.1.4",
-    "reduce-function-call": "^1.0.1"
+    "balanced-match": "^0.2.0",
+    "css-list": "0.0.3",
+    "postcss": "^4.1.4"
   }
 }
