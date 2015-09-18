@@ -70,6 +70,10 @@ let tests = [{
     fixture: 'h1{width:calc(192px + 2em)}',
     expected: 'h1{width:calc(2in + 2em)}'
 }, {
+    message: 'should not convert zero values in calc',
+    fixture: 'h1{width:calc(0em)}',
+    expected: 'h1{width:calc(0em)}'
+}, {
     message: 'should not mangle values outside of its domain',
     fixture: 'h1{background:url(a.png)}',
     expected: 'h1{background:url(a.png)}'
@@ -84,7 +88,7 @@ let tests = [{
 }, {
     message: 'should optimise fractions inside calc',
     fixture: 'h1{width:calc(10.px + .0px)}',
-    expected: 'h1{width:calc(10px + 0)}'
+    expected: 'h1{width:calc(10px + 0px)}'
 }, {
     message: 'should handle leading zero in rem values',
     fixture: '.one{top:0.25rem}',

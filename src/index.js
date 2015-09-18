@@ -4,16 +4,18 @@ import postcss from 'postcss';
 import convert from './lib/convert';
 import valueParser, {unit} from 'postcss-value-parser';
 
-function processValueNode (opts, node) {
+function processValueNode (opts, node, insideCalc) {
     if (node.type === 'word') {
         let pair = unit(node.value);
         if (pair) {
             let num = Number(pair.number);
             let u = pair.unit.toLowerCase();
-            if (num === 0) {
-                node.value = (u === 'ms' || u === 's') ? 0 + u : 0;
-            } else {
+            if (num !== 0) {
                 node.value = convert(num, u, opts);
+            } else if (u === 'ms' || u === 's' || insideCalc) {
+                node.value = 0 + u;
+            } else {
+                node.value = 0;
             }
         }
     }
@@ -22,13 +24,14 @@ function processValueNode (opts, node) {
     }
 }
 
-function walk (node, cb) {
+function walk (node, cb, insideCalc) {
     var i, max, n;
     if (node.nodes) {
         for (i = 0, max = node.nodes.length; i < max; i += 1) {
             n = node.nodes[i];
-            if (false !== cb(node.nodes[i])) {
-                walk(n, cb);
+            insideCalc = insideCalc || ( n.type === 'function' && n.value === 'calc' );
+            if (false !== cb(node.nodes[i], insideCalc)) {
+                walk(n, cb, insideCalc);
             }
         }
     }
